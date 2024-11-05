@@ -5,8 +5,7 @@ import csv
 import ast
 
 class DataMaker:
-    def __init__(self, excel_path):
-        self.excel_path = excel_path
+    def __init__(self):
         self.dbm = db.DatabaseManager('database/standard_finder.db')
     
     def get_tag_list_by_search_input(self, keyword):
