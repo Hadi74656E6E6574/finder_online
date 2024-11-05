@@ -3,10 +3,13 @@ import pandas as pd
 import db
 import csv
 import ast
+import os 
 
 class DataMaker:
     def __init__(self):
-        self.dbm = db.DatabaseManager('database/standard_finder.db')
+        base_path = os.path.abspath(os.path.dirname(__file__))
+        db_path = os.path.join(base_path, 'database', 'standard_finder.db')
+        self.dbm = db.DatabaseManager(db_path)
     
     def get_tag_list_by_search_input(self, keyword):
         self.dbm.get_keywords_by_similarity_check(keyword)
