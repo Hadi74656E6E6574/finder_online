@@ -77,6 +77,8 @@ tag_li = list(set(tag_li))
 st.write('Das sind deine tags:', tag_li)
 
 if st.button('SEARCH'):
+    result_li1 = []
+    result_li2 = []
     tags = tuple(tag_li)
     placeholder = ','.join(['?' for item in tags])
     if option == 'OR':
@@ -94,8 +96,14 @@ if st.button('SEARCH'):
         HAVING COUNT(DISTINCT Keywords.title) = {len(tags)}
         ''', params='select_plus', outer_tup=tags)
     print(dm.dbm.output)
-    result = [''.join((item[1], ' || ', item[2])) for item in dm.dbm.output]
-    print(result)
+    # result = [''.join((item[1], ' || ', item[2])) for item in dm.dbm.output]
+    for item in dm.dbm.output: 
+        result_li1.append(item[1])
+        result_li2.append(item[2])
+    df_result = pd.DataFrame(columns=['Title', 'heading'])
+    df_result['Title'] = result_li1
+    df_result['heading'] = result_li2
+    # print(result)
     # CSV ---------------------------------------------------------
     # CSV-Datei einlesen
     df = pd.read_csv(session_tags_path)
@@ -107,4 +115,5 @@ if st.button('SEARCH'):
     df.to_csv(session_tags_path, index=False)
 
     
-    st.write('Gefundene Normen: ', result)
+    # st.write('Gefundene Normen: ', result)
+    st.write('Gefundene Normen: ', df_result)
