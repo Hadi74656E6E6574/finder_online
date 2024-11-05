@@ -5,10 +5,12 @@ import csv
 import ast
 import os 
 
+base_path = os.path.abspath(os.path.dirname(__file__))
+db_path = os.path.join(base_path, 'database', 'standard_finder.db')
+session_tags_path = os.path.join(base_path, 'csv_files', 'session_tags.csv')
+
 class DataMaker:
     def __init__(self):
-        base_path = os.path.abspath(os.path.dirname(__file__))
-        db_path = os.path.join(base_path, 'database', 'standard_finder.db')
         self.dbm = db.DatabaseManager(db_path)
     
     def get_tag_list_by_search_input(self, keyword):
@@ -39,7 +41,7 @@ if st.button('ADD'):
 
     fieldnames = ['tags']
 
-    with open(r'csv_files\session_tags.csv', mode='a', newline='') as file:
+    with open(session_tags_path, mode='a', newline='') as file:
         writer = csv.DictWriter(file, fieldnames=fieldnames)
         writer.writerow({
             'tags': tags
@@ -55,7 +57,7 @@ option = st.radio(
 # CSV ---------------------------------------------------------
 tag_li = []
 li = []
-with open(r'csv_files\session_tags.csv', 'r', newline='') as file:
+with open(session_tags_path, 'r', newline='') as file:
         csv_reader = csv.reader(file)
         # Überspringen der ersten Zeile
         next(csv_reader, None)
@@ -96,13 +98,13 @@ if st.button('SEARCH'):
     print(result)
     # CSV ---------------------------------------------------------
     # CSV-Datei einlesen
-    df = pd.read_csv(r'csv_files\session_tags.csv')
+    df = pd.read_csv(session_tags_path)
 
     # Nur die Header-Zeile behalten
     df = df.iloc[0:0] # Start- und Endindex 
 
     # Ergebnis in eine neue CSV-Datei schreiben
-    df.to_csv(r'csv_files\session_tags.csv', index=False)
+    df.to_csv(session_tags_path, index=False)
 
     
     st.write('Gefundene Normen: ', result)
